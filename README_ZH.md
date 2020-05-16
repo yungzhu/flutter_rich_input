@@ -1,19 +1,19 @@
 # flutter_rich_input
 
-This is a high performance rich media input box, implemented through the native textfield extension, with less disruptive, but at the same time has a strong extensibility, implements the @ someone, # topics, expressions and other functions, support custom color highlighting
+这是一个高性能的富媒体输入框，通过原生的 textfield 扩展实现，具有较小的破坏性，同时具有较强的扩展性，实现了@某人，#话题，表情等功能，支持自定义高亮
 
-Language: [English](README.md) | [中文简体](README-ZH.md)
+文档语言: [English](README.md) | [中文简体](README-ZH.md)
 
-## Special feature
+## 特色功能
 
--   Use native textfield capabilities with less code, less disruption and subsequent compatibility
--   Support @someone #topic and insert emojis, etc.
--   Support for custom highlighting and even your own rendering
--   Support for custom value fields to enhance rich text
+-   用较少的代码，尽量使用原生的 textfield 能力，减少破坏性及后续兼容性
+-   支持@某人 #话题 插入表情等
+-   支持自定义高亮效果，甚至实现自己的渲染方式
+-   支持自定义 value 字段，增强富文本的能力
 
 ![Demo](demo.jpg)
 
-## Getting Started
+## 开始入门
 
 ```
 import 'package:flutter/material.dart';
@@ -125,4 +125,4 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 ```
 
-> Provide additional api via RichInput class and interface consistent with native textfield via RichInput.textfield method
+> 主要通过 RichInput 提供额外的 api，通过 RichInput.textfield 提供和原生 textfield 一致化的接口

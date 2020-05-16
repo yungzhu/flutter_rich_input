@@ -118,9 +118,9 @@ class RichInput {
     );
   }
 
-  final TextEditingController _controller = TextEditingController();
   final List<BlockBase> _list = [];
   final ComposeBlock _composeText = ComposeBlock();
+  TextEditingController _controller = TextEditingController();
   TextEditingValue _old;
   int _cursorOffset = 0;
 
@@ -220,6 +220,14 @@ class RichInput {
     block.add(text);
     _cursorOffset += text.length;
     _refresh();
+  }
+
+  /// dispose
+  void dispose() {
+    if (_controller != null) {
+      _controller.dispose();
+      _controller = null;
+    }
   }
 
   void _addBlock(BlockBase block) {

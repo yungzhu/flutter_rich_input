@@ -77,8 +77,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     onPressed: () {
                       var at = RickBlock(
                         text: " #subject ",
-                        value: "#888999 ",
-                        style: TextStyle(color: Colors.red),
+                        value: " #888999 ",
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
                       );
                       _richInput.addBlock(at);
                     },
