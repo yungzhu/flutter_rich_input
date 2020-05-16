@@ -255,7 +255,7 @@ class _TextFieldSelectionGestureDetectorBuilder
 ///  * Learn how to use a [TextEditingController] in one of our
 ///    [cookbook recipe](https://flutter.dev/docs/cookbook/forms/text-field-changes#2-use-a-texteditingcontroller)s.
 class RichTextField extends StatefulWidget {
-  final Function(TextEditingValue, TextStyle) richTextBuilder;
+  final Function(TextEditingValue) richTextBuilder;
 
   /// Creates a Material Design text field.
   ///

@@ -62,14 +62,14 @@ class RichInput {
   }) {
     this.controller = controller ?? TextEditingController();
     return RichTextField(
-      richTextBuilder: (TextEditingValue value, TextStyle style) {
+      richTextBuilder: (TextEditingValue value) {
         List<InlineSpan> children = [];
         _list.forEach((f) {
           children.add(f.getSpan(value));
         });
 
         return TextSpan(
-          style: style,
+          style: style ?? const TextStyle(color: Colors.black),
           children: children,
         );
       },
@@ -149,7 +149,7 @@ class RichInput {
           _cursorOffset--;
           _old = _getEditingValue();
 
-          _addText(_composeText);
+          _addBlock(_composeText);
         }
         return;
       } else if (flag) {
@@ -194,21 +194,41 @@ class RichInput {
     return text;
   }
 
-  /// Add a text block
-  void add(TextBlock text) {
-    _addText(text);
-    _cursorOffset += text.getText().length;
+  /// Clear input
+  void clear() {
+    _list.clear();
+    _cursorOffset = 0;
     _refresh();
   }
 
-  void _addText(TextBlock text) {
+  /// Add a text block
+  void addBlock(TextBlock block) {
+    _addBlock(block);
+    _cursorOffset += block.getText().length;
+    _refresh();
+  }
+
+  /// Add a comment text
+  void addText(String text) {
+    int from = _controller.selection.baseOffset;
+    TextBlock block = _getByIndex(from);
+    if (block == null || !(block is CommonBlock)) {
+      block = CommonBlock();
+      _list.add(block);
+    }
+    block.add(text);
+    _cursorOffset += text.length;
+    _refresh();
+  }
+
+  void _addBlock(TextBlock block) {
     TextBlock current = _getByIndex(_cursorOffset);
     if (current == null) {
-      _list.add(text);
+      _list.add(block);
     } else if (current is CommonBlock && current.getText().length > 0) {
       var delStr = current.del(current.getText().length - current.startIndex);
       var index = _list.indexOf(current);
-      _list.insert(index + 1, text);
+      _list.insert(index + 1, block);
       if (delStr.length > 0) {
         var newText = CommonBlock(delStr);
         _list.insert(index + 2, newText);
@@ -216,9 +236,9 @@ class RichInput {
     } else {
       var index = _list.indexOf(current);
       if (index == _list.length - 1) {
-        _list.add(text);
+        _list.add(block);
       } else {
-        _list.insert(index + 1, text);
+        _list.insert(index + 1, block);
       }
     }
   }
@@ -253,13 +273,13 @@ class RichInput {
 
   void _addByIndex(int from, int to) {
     String char = _controller.value.text.substring(from, to);
-    TextBlock text = _getByIndex(from);
-    if (text == null || !(text is CommonBlock)) {
-      // print("===new text===");
-      text = CommonBlock();
-      _list.add(text);
+    TextBlock block = _getByIndex(from);
+    if (block == null || !(block is CommonBlock)) {
+      // print("===new block===");
+      block = CommonBlock();
+      _list.add(block);
     }
-    text.add(char);
+    block.add(char);
   }
 
   TextBlock _getByIndex(int from) {
@@ -305,15 +325,15 @@ class RichInput {
   }
 
   int _delByIndex(int from, bool checkCursorOffset) {
-    TextBlock text = _getByIndex(from);
-    if (text != null) {
-      if (text is CommonBlock) {
-        text.del(1);
+    TextBlock block = _getByIndex(from);
+    if (block != null) {
+      if (block is CommonBlock) {
+        block.del(1);
         return 1;
       } else {
-        if (checkCursorOffset) _cursorOffset -= text.startIndex;
-        _list.remove(text);
-        return text.getText().length;
+        if (checkCursorOffset) _cursorOffset -= block.startIndex;
+        _list.remove(block);
+        return block.getText().length;
       }
     } else {
       throw 'invalid index';
@@ -321,9 +341,9 @@ class RichInput {
   }
 
   // _handleMove() {
-  //   var text = _getByIndex(_cursorOffset);
-  //   if (!(text is CommonBlock)) {
-  //     _cursorOffset -= text.startIndex;
+  //   var block = _getByIndex(_cursorOffset);
+  //   if (!(block is CommonBlock)) {
+  //     _cursorOffset -= block.startIndex;
   //   }
   // }
 

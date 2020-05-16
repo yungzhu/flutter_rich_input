@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class RichEditableText extends EditableText {
-  final TextSpan Function(TextEditingValue, TextStyle) richTextBuilder;
+  final TextSpan Function(TextEditingValue) richTextBuilder;
   RichEditableText({
     Key key,
     @required TextEditingController controller,
@@ -131,7 +131,7 @@ class _RichEditableTextState extends EditableTextState {
   TextSpan buildTextSpan({TextStyle style, bool withComposing = false}) {
     final TextEditingValue value = textEditingValue;
     if (widget.richTextBuilder != null) {
-      return widget.richTextBuilder(value, style);
+      return widget.richTextBuilder(value);
     }
     final String text = value.text;
 
