@@ -2,5 +2,6 @@
 
 -   Support Highlighting
 -   Support @someone
+-   Support #subject
 -   Supports block deletion
 -   Based on native textfield, less damage to textfield
