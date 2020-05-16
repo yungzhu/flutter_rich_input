@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rich_input/block/at_block.dart';
+import 'package:flutter_rich_input/block/rich_block.dart';
 import 'package:flutter_rich_input/flutter_rich_input.dart';
 
 void main() {
@@ -11,10 +11,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
       home: MyHomePage(),
     );
   }
@@ -26,13 +22,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  RichInput rich;
-  TextEditingController _controller;
+  RichInput _richInput;
 
   @override
   void initState() {
-    rich = RichInput();
-    _controller = TextEditingController();
+    _richInput = RichInput();
+    _richInput.controller.addListener(() {
+      setState(() {});
+    });
+    _richInput.addText("text");
     super.initState();
   }
 
@@ -43,35 +41,60 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Padding(
           padding: const EdgeInsets.all(15),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              rich.textField(
-                controller: _controller,
-                // style: TextStyle(color: Colors.red),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+              _richInput.textField(),
+              Wrap(
+                spacing: 10,
                 children: [
                   RaisedButton(
-                    child: Text("Add @"),
+                    child: const Text("Add Text"),
                     onPressed: () {
-                      var at = AtBlock("@abc", "@123456");
-                      rich.addBlock(at);
+                      _richInput.addText("text");
                     },
                   ),
                   RaisedButton(
-                    child: Text("Add Emoji"),
+                    child: const Text("Add ☺"),
                     onPressed: () {
-                      rich.addText("☺");
+                      _richInput.addText("☺");
                     },
                   ),
                   RaisedButton(
-                    child: Text("Clear"),
+                    child: const Text("Add 👍"),
                     onPressed: () {
-                      rich.clear();
+                      _richInput.addText("👍");
+                    },
+                  ),
+                  RaisedButton(
+                    child: const Text("Add @    "),
+                    onPressed: () {
+                      var at = RickBlock(text: " @abc ", value: " @123456 ");
+                      _richInput.addBlock(at);
+                    },
+                  ),
+                  RaisedButton(
+                    child: const Text("Add #"),
+                    onPressed: () {
+                      var at = RickBlock(
+                        text: " #subject ",
+                        value: "#888999 ",
+                        style: TextStyle(color: Colors.red),
+                      );
+                      _richInput.addBlock(at);
+                    },
+                  ),
+                  RaisedButton(
+                    child: const Text("Clear"),
+                    onPressed: () {
+                      _richInput.clear();
                     },
                   )
                 ],
               ),
+              const SizedBox(height: 10),
+              Text("Text:${_richInput.text}"),
+              const SizedBox(height: 10),
+              Text("Value:${_richInput.value}"),
             ],
           ),
         ),

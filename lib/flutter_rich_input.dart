@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_rich_input/block/common_block.dart';
+import 'package:flutter_rich_input/block/block_base.dart';
 import 'package:flutter_rich_input/block/compos_block.dart';
 import 'package:flutter_rich_input/block/text_block.dart';
 import 'extend/rich_text_field.dart';
@@ -14,7 +14,6 @@ class RichInput {
   /// Get the input widget
   RichTextField textField({
     Key key,
-    TextEditingController controller,
     FocusNode focusNode,
     InputDecoration decoration = const InputDecoration(),
     TextInputType keyboardType,
@@ -60,7 +59,6 @@ class RichInput {
     ScrollController scrollController,
     ScrollPhysics scrollPhysics,
   }) {
-    this.controller = controller ?? TextEditingController();
     return RichTextField(
       richTextBuilder: (TextEditingValue value) {
         List<InlineSpan> children = [];
@@ -120,25 +118,23 @@ class RichInput {
     );
   }
 
+  final TextEditingController _controller = TextEditingController();
+  final List<BlockBase> _list = [];
+  final ComposeBlock _composeText = ComposeBlock();
   TextEditingValue _old;
-  TextEditingController _controller;
-  List<TextBlock> _list = [];
-  int _cursorOffset;
-  ComposeBlock _composeText = ComposeBlock();
+  int _cursorOffset = 0;
 
-  TextEditingController get controller {
-    return _controller;
+  RichInput() {
+    _init();
   }
 
-  set controller(TextEditingController value) {
-    if (_controller == value) return;
-    _controller = value;
+  _init() {
     _old = _controller.value;
     bool flag = false;
 
     _controller.addListener(() {
       // print("---------text changed------------");
-      TextEditingValue now = _controller.value;
+      final TextEditingValue now = _controller.value;
       // print(now);
       if (now.composing.isValid) {
         if (!flag) {
@@ -156,8 +152,8 @@ class RichInput {
         flag = false;
         _list.remove(_composeText);
       }
-      int oldCount = _old.text.length;
-      int nowCount = now.text.length;
+      final int oldCount = _old.text.length;
+      final int nowCount = now.text.length;
       _cursorOffset = now.selection.baseOffset;
 
       if (oldCount < nowCount) {
@@ -174,6 +170,11 @@ class RichInput {
 
       _refresh();
     });
+  }
+
+  /// Get TextEditingController
+  TextEditingController get controller {
+    return _controller;
   }
 
   /// Get value
@@ -202,7 +203,7 @@ class RichInput {
   }
 
   /// Add a text block
-  void addBlock(TextBlock block) {
+  void addBlock(BlockBase block) {
     _addBlock(block);
     _cursorOffset += block.getText().length;
     _refresh();
@@ -210,10 +211,10 @@ class RichInput {
 
   /// Add a comment text
   void addText(String text) {
-    int from = _controller.selection.baseOffset;
-    TextBlock block = _getByIndex(from);
-    if (block == null || !(block is CommonBlock)) {
-      block = CommonBlock();
+    final int from = _controller.selection.baseOffset;
+    BlockBase block = _getByIndex(from);
+    if (block == null || !(block is TextBlock)) {
+      block = TextBlock();
       _list.add(block);
     }
     block.add(text);
@@ -221,16 +222,16 @@ class RichInput {
     _refresh();
   }
 
-  void _addBlock(TextBlock block) {
-    TextBlock current = _getByIndex(_cursorOffset);
+  void _addBlock(BlockBase block) {
+    final BlockBase current = _getByIndex(_cursorOffset);
     if (current == null) {
       _list.add(block);
-    } else if (current is CommonBlock && current.getText().length > 0) {
+    } else if (current is TextBlock && current.getText().length > 0) {
       var delStr = current.del(current.getText().length - current.startIndex);
       var index = _list.indexOf(current);
       _list.insert(index + 1, block);
       if (delStr.length > 0) {
-        var newText = CommonBlock(delStr);
+        var newText = TextBlock(text: delStr);
         _list.insert(index + 2, newText);
       }
     } else {
@@ -250,41 +251,41 @@ class RichInput {
   }
 
   void _handleAdd() {
-    TextEditingValue now = _controller.value;
-    int oldCount = _old.text.length;
-    int nowCount = now.text.length;
+    final TextEditingValue now = _controller.value;
+    final int oldCount = _old.text.length;
+    final int nowCount = now.text.length;
 
     if (nowCount - oldCount == 1) {
-      int start = now.selection.baseOffset - 1;
+      final int start = now.selection.baseOffset - 1;
       _addByIndex(start, start + 1);
     } else {
-      var from = 0;
+      int from = 0;
       while (from < oldCount) {
         if (_old.text.codeUnitAt(from) != now.text.codeUnitAt(from)) {
           break;
         }
         from++;
       }
-      var to = nowCount - oldCount + from;
+      final int to = nowCount - oldCount + from;
       // print("add from $from to:$to");
       _addByIndex(from, to);
     }
   }
 
   void _addByIndex(int from, int to) {
-    String char = _controller.value.text.substring(from, to);
-    TextBlock block = _getByIndex(from);
-    if (block == null || !(block is CommonBlock)) {
+    final String char = _controller.value.text.substring(from, to);
+    BlockBase block = _getByIndex(from);
+    if (block == null || !(block is TextBlock)) {
       // print("===new block===");
-      block = CommonBlock();
+      block = TextBlock();
       _list.add(block);
     }
     block.add(char);
   }
 
-  TextBlock _getByIndex(int from) {
-    var index = 0;
-    TextBlock item;
+  BlockBase _getByIndex(int from) {
+    int index = 0;
+    BlockBase item;
     for (var i = 0; i < _list.length; i++) {
       if (from >= index) {
         item = _list[i];
@@ -298,9 +299,9 @@ class RichInput {
   }
 
   void _handleDel() {
-    TextEditingValue now = _controller.value;
-    int oldCount = _old.text.length;
-    int nowCount = now.text.length;
+    final TextEditingValue now = _controller.value;
+    final int oldCount = _old.text.length;
+    final int nowCount = now.text.length;
 
     if (nowCount == 0) {
       _list.clear();
@@ -314,7 +315,7 @@ class RichInput {
         }
         from++;
       }
-      var to = oldCount - nowCount + from - 1;
+      int to = oldCount - nowCount + from - 1;
       // print("del from $from to:$to");
 
       while (to >= from) {
@@ -325,9 +326,9 @@ class RichInput {
   }
 
   int _delByIndex(int from, bool checkCursorOffset) {
-    TextBlock block = _getByIndex(from);
+    BlockBase block = _getByIndex(from);
     if (block != null) {
-      if (block is CommonBlock) {
+      if (block is TextBlock) {
         block.del(1);
         return 1;
       } else {
@@ -348,7 +349,7 @@ class RichInput {
   // }
 
   TextEditingValue _getEditingValue() {
-    var now = _controller.value;
+    final TextEditingValue now = _controller.value;
 
     return TextEditingValue(
       text: this.text,

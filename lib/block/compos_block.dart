@@ -1,9 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_rich_input/block/text_block.dart';
+import 'package:flutter_rich_input/block/block_base.dart';
 
 /// Processing of compose texts
-class ComposeBlock extends TextBlock {
+class ComposeBlock extends BlockBase {
   ComposeBlock();
 
   @override

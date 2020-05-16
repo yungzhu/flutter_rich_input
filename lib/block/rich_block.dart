@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rich_input/block/text_block.dart';
+import 'package:flutter_rich_input/block/block_base.dart';
 
-/// Processing @text
-class AtBlock extends TextBlock {
+/// Processing rich block
+class RickBlock extends BlockBase {
+  @protected
   String text;
+  @protected
   String value;
-  AtBlock(this.text, this.value);
+
+  final TextStyle style;
+  RickBlock({@required this.text, this.value, this.style});
 
   @override
   void add(String chat) {
@@ -21,18 +25,18 @@ class AtBlock extends TextBlock {
   InlineSpan getSpan(TextEditingValue value) {
     return TextSpan(
       text: getText(),
-      style: const TextStyle(color: Colors.blue),
+      style: style ?? const TextStyle(color: Colors.blue),
     );
   }
 
   @override
   String getText() {
-    return text;
+    return text ?? "";
   }
 
   @override
   String getValue() {
     if (value != null) return value.toString();
-    return text;
+    return text ?? "";
   }
 }

@@ -1,23 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rich_input/block/block_base.dart';
 
-abstract class TextBlock {
-  /// Start position of additions and deletions
-  int startIndex = 0;
+/// Processing of common texts
+class TextBlock extends BlockBase {
+  @protected
+  String text;
+  final TextStyle style;
+  TextBlock({this.text = "", this.style}) : assert(text != null);
 
-  TextBlock();
+  @override
+  void add(String char) {
+    text = text.substring(0, startIndex) + char + _getFromIndex(startIndex);
+  }
 
-  /// Add characters
-  void add(String char);
+  @override
+  String del(int count) {
+    var str = text.substring(startIndex, startIndex + count);
+    text = text.substring(0, startIndex) + _getFromIndex(startIndex + count);
+    return str;
+  }
 
-  /// Delete character
-  String del(int count);
+  String _getFromIndex(int index) {
+    if (index < text.length) {
+      return text.substring(index, text.length);
+    }
+    return "";
+  }
 
-  /// Get the rendered text
-  InlineSpan getSpan(TextEditingValue value);
+  @override
+  InlineSpan getSpan(TextEditingValue value) {
+    return TextSpan(text: text);
+  }
 
-  /// Text displayed
-  String getText();
+  @override
+  String getText() {
+    return text;
+  }
 
-  /// Value output
-  String getValue();
+  @override
+  String getValue() {
+    return text;
+  }
 }
