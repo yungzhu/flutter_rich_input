@@ -1,3 +1,7 @@
+## [1.1.0] - 2020-5-17
+
+-   Add delText method
+
 ## [1.0.0] - 2020-5-16
 
 -   Support Highlighting

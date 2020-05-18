@@ -222,6 +222,30 @@ class RichInput {
     _refresh();
   }
 
+  /// Del text
+  void delText(int start, int count) {
+    if (count < 1) return;
+    if (start < 0) start = 0;
+
+    var len = this.text.length;
+    var from = start;
+    var to = from + count;
+
+    if (to >= len) {
+      to = len - 1;
+    }
+
+    while (to >= from) {
+      var num = _delByIndex(to, true);
+      to -= num;
+    }
+    _cursorOffset = start;
+    if (_cursorOffset > this.text.length) {
+      _cursorOffset = this.text.length;
+    }
+    _refresh();
+  }
+
   /// dispose
   void dispose() {
     if (_controller != null) {

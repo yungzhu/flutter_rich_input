@@ -27,6 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     _richInput = RichInput();
+    // refresh text and value
     _richInput.controller.addListener(() {
       setState(() {});
     });
@@ -54,9 +55,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                   ),
                   RaisedButton(
-                    child: const Text("Add ☺"),
+                    child: const Text("Add 😁"),
                     onPressed: () {
-                      _richInput.addText("☺");
+                      _richInput.addText("😁");
                     },
                   ),
                   RaisedButton(
@@ -84,6 +85,12 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       );
                       _richInput.addBlock(at);
+                    },
+                  ),
+                  RaisedButton(
+                    child: const Text("Del"),
+                    onPressed: () {
+                      _richInput.delText(_richInput.text.length - 3, 1);
                     },
                   ),
                   RaisedButton(
