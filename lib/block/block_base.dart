@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Text block base class
 abstract class BlockBase {
   /// Start position of additions and deletions
   int startIndex = 0;
