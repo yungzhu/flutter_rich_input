@@ -224,12 +224,12 @@ class RichInput {
 
   /// Del text
   void delText(int start, int count) {
-    if (count < 1) return;
+    if (count < 0) return;
     if (start < 0) start = 0;
 
     var len = this.text.length;
     var from = start;
-    var to = from + count;
+    var to = from + count - 1;
 
     if (to >= len) {
       to = len - 1;

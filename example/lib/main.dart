@@ -88,12 +88,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                   ),
                   RaisedButton(
-                    child: const Text("Del"),
-                    onPressed: () {
-                      _richInput.delText(_richInput.text.length - 3, 1);
-                    },
-                  ),
-                  RaisedButton(
                     child: const Text("Clear"),
                     onPressed: () {
                       _richInput.clear();
