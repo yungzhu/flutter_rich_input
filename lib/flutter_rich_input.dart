@@ -123,6 +123,7 @@ class RichInput {
   TextEditingController _controller = TextEditingController();
   TextEditingValue _old;
   int _cursorOffset = 0;
+  bool _isComposing = false;
 
   RichInput() {
     _init();
@@ -130,15 +131,14 @@ class RichInput {
 
   _init() {
     _old = _controller.value;
-    bool flag = false;
 
     _controller.addListener(() {
       // print("---------text changed------------");
       final TextEditingValue now = _controller.value;
       // print(now);
       if (now.composing.isValid) {
-        if (!flag) {
-          flag = true;
+        if (!_isComposing) {
+          _isComposing = true;
 
           // Delete the generated one character first.
           _delByIndex(_cursorOffset - 1, false);
@@ -148,9 +148,8 @@ class RichInput {
           _addBlock(_composeText);
         }
         return;
-      } else if (flag) {
-        flag = false;
-        _list.remove(_composeText);
+      } else if (_isComposing) {
+        _clearCompose();
       }
       final int oldCount = _old.text.length;
       final int nowCount = now.text.length;
@@ -172,6 +171,14 @@ class RichInput {
     });
   }
 
+  _clearCompose() {
+    if (_isComposing) {
+      _isComposing = false;
+      _controller.clearComposing();
+      _list.remove(_composeText);
+    }
+  }
+
   /// Get TextEditingController
   TextEditingController get controller {
     return _controller;
@@ -188,15 +195,12 @@ class RichInput {
 
   /// Get display text
   String get text {
-    var text = "";
-    _list.forEach((f) {
-      text += f.getText();
-    });
-    return text;
+    return _controller.text;
   }
 
   /// Clear input
   void clear() {
+    _clearCompose();
     _list.clear();
     _cursorOffset = 0;
     _refresh();
@@ -204,6 +208,7 @@ class RichInput {
 
   /// Add a text block
   void addBlock(BlockBase block) {
+    _clearCompose();
     _addBlock(block);
     _cursorOffset += block.getText().length;
     _refresh();
@@ -211,6 +216,7 @@ class RichInput {
 
   /// Add a comment text
   void addText(String text) {
+    _clearCompose();
     final int from = _controller.selection.baseOffset;
     BlockBase block = _getByIndex(from);
     if (block == null || !(block is TextBlock)) {
@@ -224,10 +230,11 @@ class RichInput {
 
   /// Del text
   void delText(int start, int count) {
+    _clearCompose();
     if (count < 0) return;
     if (start < 0) start = 0;
 
-    var len = this.text.length;
+    var len = _controller.text.length;
     var from = start;
     var to = from + count - 1;
 
@@ -240,8 +247,8 @@ class RichInput {
       to -= num;
     }
     _cursorOffset = start;
-    if (_cursorOffset > this.text.length) {
-      _cursorOffset = this.text.length;
+    if (_cursorOffset > this._blockText.length) {
+      _cursorOffset = this._blockText.length;
     }
     _refresh();
   }
@@ -279,7 +286,9 @@ class RichInput {
   void _refresh() {
     _old = _getEditingValue();
     // _debug();
-    _controller.value = _old;
+    Future.microtask(() {
+      _controller.value = _old;
+    });
   }
 
   void _handleAdd() {
@@ -380,11 +389,19 @@ class RichInput {
   //   }
   // }
 
+  String get _blockText {
+    var text = "";
+    _list.forEach((f) {
+      text += f.getText();
+    });
+    return text;
+  }
+
   TextEditingValue _getEditingValue() {
     final TextEditingValue now = _controller.value;
 
     return TextEditingValue(
-      text: this.text,
+      text: _blockText,
       selection: TextSelection(
         baseOffset: _cursorOffset,
         extentOffset: _cursorOffset,
