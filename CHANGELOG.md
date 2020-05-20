@@ -1,3 +1,7 @@
+## [1.1.2] - 2020-5-20
+
+-   Fix a display error caused by deleting text during composing
+
 ## [1.1.1] - 2020-5-17
 
 -   Add delText method
