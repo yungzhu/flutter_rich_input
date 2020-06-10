@@ -11,7 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter_rich_input/extend/rich_editable_text.dart';
+import 'rich_editable_text.dart';
 
 export 'package:flutter/services.dart'
     show
@@ -343,7 +343,7 @@ class RichTextField extends StatefulWidget {
     this.selectionHeightStyle = ui.BoxHeightStyle.tight,
     this.selectionWidthStyle = ui.BoxWidthStyle.tight,
     this.keyboardAppearance,
-    this.scrollPadding = const EdgeInsets.all(20.0),
+    this.scrollPadding = const EdgeInsets.all(20),
     this.dragStartBehavior = DragStartBehavior.start,
     this.enableInteractiveSelection = true,
     this.onTap,
@@ -793,7 +793,7 @@ class RichTextField extends StatefulWidget {
         defaultValue: null));
     properties.add(DiagnosticsProperty<EdgeInsetsGeometry>(
         'scrollPadding', scrollPadding,
-        defaultValue: const EdgeInsets.all(20.0)));
+        defaultValue: const EdgeInsets.all(20)));
     properties.add(FlagProperty('selectionEnabled',
         value: selectionEnabled,
         defaultValue: true,
@@ -1050,7 +1050,7 @@ class _RichTextFieldState extends State<RichTextField>
         paintCursorAboveText = true;
         cursorOpacityAnimates = true;
         cursorColor ??= CupertinoTheme.of(context).primaryColor;
-        cursorRadius ??= const Radius.circular(2.0);
+        cursorRadius ??= const Radius.circular(2);
         cursorOffset = Offset(
             iOSHorizontalOffset / MediaQuery.of(context).devicePixelRatio, 0);
         break;
@@ -1124,7 +1124,7 @@ class _RichTextFieldState extends State<RichTextField>
     if (widget.decoration != null) {
       child = AnimatedBuilder(
         animation: Listenable.merge(<Listenable>[focusNode, controller]),
-        builder: (BuildContext context, Widget child) {
+        builder: (context, child) {
           return InputDecorator(
             decoration: _getEffectiveDecoration(),
             baseStyle: widget.style,
@@ -1143,11 +1143,11 @@ class _RichTextFieldState extends State<RichTextField>
     return IgnorePointer(
       ignoring: !_isEnabled,
       child: MouseRegion(
-        onEnter: (PointerEnterEvent event) => _handleHover(true),
-        onExit: (PointerExitEvent event) => _handleHover(false),
+        onEnter: (event) => _handleHover(true),
+        onExit: (event) => _handleHover(false),
         child: AnimatedBuilder(
           animation: controller, // changes the _currentLength
-          builder: (BuildContext context, Widget child) {
+          builder: (context, child) {
             return Semantics(
               maxValueLength: widget.maxLengthEnforced &&
                       widget.maxLength != null &&

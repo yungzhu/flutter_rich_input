@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_rich_input/block/block_base.dart';
+import 'block_base.dart';
 
 /// Processing of compose texts
 class ComposeBlock extends BlockBase {
@@ -19,16 +19,16 @@ class ComposeBlock extends BlockBase {
   @override
   InlineSpan getSpan(TextEditingValue value) {
     if (value.composing.isValid) {
-      TextStyle composingStyle =
-          const TextStyle(decoration: TextDecoration.underline);
-      var text = value.text;
-      var composing = value.composing;
+      const TextStyle composingStyle =
+          TextStyle(decoration: TextDecoration.underline);
+      final text = value.text;
+      final composing = value.composing;
       return TextSpan(
         style: composingStyle,
         text: composing.textInside(text),
       );
     }
-    return TextSpan(text: "");
+    return const TextSpan(text: "");
   }
 
   @override

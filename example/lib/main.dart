@@ -49,49 +49,49 @@ class _MyHomePageState extends State<MyHomePage> {
                 spacing: 10,
                 children: [
                   RaisedButton(
-                    child: const Text("Add Text"),
                     onPressed: () {
                       _richInput.addText("text");
                     },
+                    child: const Text("Add Text"),
                   ),
                   RaisedButton(
-                    child: const Text("Add 😁"),
                     onPressed: () {
                       _richInput.addText("😁");
                     },
+                    child: const Text("Add 😁"),
                   ),
                   RaisedButton(
-                    child: const Text("Add 👍"),
                     onPressed: () {
                       _richInput.addText("👍");
                     },
+                    child: const Text("Add 👍"),
                   ),
                   RaisedButton(
-                    child: const Text("Add @    "),
                     onPressed: () {
-                      var at = RickBlock(text: " @abc ", value: " @123456 ");
+                      final at = RickBlock(text: " @abc ", value: " @123456 ");
                       _richInput.addBlock(at);
                     },
+                    child: const Text("Add @    "),
                   ),
                   RaisedButton(
-                    child: const Text("Add #"),
                     onPressed: () {
-                      var at = RickBlock(
+                      final at = RickBlock(
                         text: " #subject ",
                         value: " #888999 ",
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.red,
                           fontWeight: FontWeight.bold,
                         ),
                       );
                       _richInput.addBlock(at);
                     },
+                    child: const Text("Add #"),
                   ),
                   RaisedButton(
-                    child: const Text("Clear"),
                     onPressed: () {
                       _richInput.clear();
                     },
+                    child: const Text("Clear"),
                   )
                 ],
               ),

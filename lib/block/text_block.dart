@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rich_input/block/block_base.dart';
+import 'block_base.dart';
 
 /// Processing of common texts
 class TextBlock extends BlockBase {
@@ -15,7 +15,7 @@ class TextBlock extends BlockBase {
 
   @override
   String del(int count) {
-    var str = text.substring(startIndex, startIndex + count);
+    final str = text.substring(startIndex, startIndex + count);
     text = text.substring(0, startIndex) + _getFromIndex(startIndex + count);
     return str;
   }

@@ -1,12 +1,14 @@
 library flutter_rich_input;
 
 import 'dart:ui';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_rich_input/block/block_base.dart';
-import 'package:flutter_rich_input/block/compos_block.dart';
-import 'package:flutter_rich_input/block/text_block.dart';
+
+import 'block/block_base.dart';
+import 'block/compos_block.dart';
+import 'block/text_block.dart';
 import 'extend/rich_text_field.dart';
 
 /// Rich input box, implement @someone and color highlighting
@@ -49,7 +51,7 @@ class RichInput {
     BoxHeightStyle selectionHeightStyle = BoxHeightStyle.tight,
     BoxWidthStyle selectionWidthStyle = BoxWidthStyle.tight,
     Brightness keyboardAppearance,
-    EdgeInsets scrollPadding = const EdgeInsets.all(20.0),
+    EdgeInsets scrollPadding = const EdgeInsets.all(20),
     DragStartBehavior dragStartBehavior = DragStartBehavior.start,
     bool enableInteractiveSelection = true,
     void Function() onTap,
@@ -60,8 +62,8 @@ class RichInput {
     ScrollPhysics scrollPhysics,
   }) {
     return RichTextField(
-      richTextBuilder: (TextEditingValue value) {
-        List<InlineSpan> children = [];
+      richTextBuilder: (value) {
+        final List<InlineSpan> children = [];
         _list.forEach((f) {
           children.add(f.getSpan(value));
         });
@@ -129,7 +131,7 @@ class RichInput {
     _init();
   }
 
-  _init() {
+  void _init() {
     _old = _controller.value;
 
     _controller.addListener(() {
@@ -171,7 +173,7 @@ class RichInput {
     });
   }
 
-  _clearCompose() {
+  void _clearCompose() {
     if (_isComposing) {
       _isComposing = false;
       _controller.clearComposing();
@@ -219,7 +221,7 @@ class RichInput {
     _clearCompose();
     final int from = _controller.selection.baseOffset;
     BlockBase block = _getByIndex(from);
-    if (block == null || !(block is TextBlock)) {
+    if (block == null || block is! TextBlock) {
       block = TextBlock();
       _list.add(block);
     }
@@ -234,8 +236,8 @@ class RichInput {
     if (count < 0) return;
     if (start < 0) start = 0;
 
-    var len = _controller.text.length;
-    var from = start;
+    final len = _controller.text.length;
+    final from = start;
     var to = from + count - 1;
 
     if (to >= len) {
@@ -243,12 +245,12 @@ class RichInput {
     }
 
     while (to >= from) {
-      var num = _delByIndex(to, true);
+      final num = _delByIndex(to, true);
       to -= num;
     }
     _cursorOffset = start;
-    if (_cursorOffset > this._blockText.length) {
-      _cursorOffset = this._blockText.length;
+    if (_cursorOffset > _blockText.length) {
+      _cursorOffset = _blockText.length;
     }
     _refresh();
   }
@@ -265,16 +267,16 @@ class RichInput {
     final BlockBase current = _getByIndex(_cursorOffset);
     if (current == null) {
       _list.add(block);
-    } else if (current is TextBlock && current.getText().length > 0) {
-      var delStr = current.del(current.getText().length - current.startIndex);
-      var index = _list.indexOf(current);
+    } else if (current is TextBlock && current.getText().isNotEmpty) {
+      final delStr = current.del(current.getText().length - current.startIndex);
+      final index = _list.indexOf(current);
       _list.insert(index + 1, block);
-      if (delStr.length > 0) {
-        var newText = TextBlock(text: delStr);
+      if (delStr.isNotEmpty) {
+        final newText = TextBlock(text: delStr);
         _list.insert(index + 2, newText);
       }
     } else {
-      var index = _list.indexOf(current);
+      final index = _list.indexOf(current);
       if (index == _list.length - 1) {
         _list.add(block);
       } else {
@@ -316,7 +318,7 @@ class RichInput {
   void _addByIndex(int from, int to) {
     final String char = _controller.value.text.substring(from, to);
     BlockBase block = _getByIndex(from);
-    if (block == null || !(block is TextBlock)) {
+    if (block == null || block is! TextBlock) {
       // print("===new block===");
       block = TextBlock();
       _list.add(block);
@@ -360,14 +362,14 @@ class RichInput {
       // print("del from $from to:$to");
 
       while (to >= from) {
-        var num = _delByIndex(to, false);
+        final num = _delByIndex(to, false);
         to -= num;
       }
     }
   }
 
   int _delByIndex(int from, bool checkCursorOffset) {
-    BlockBase block = _getByIndex(from);
+    final BlockBase block = _getByIndex(from);
     if (block != null) {
       if (block is TextBlock) {
         block.del(1);

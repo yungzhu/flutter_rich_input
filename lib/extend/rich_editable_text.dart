@@ -52,7 +52,7 @@ class RichEditableText extends EditableText {
     bool paintCursorAboveText = false,
     BoxHeightStyle selectionHeightStyle = ui.BoxHeightStyle.tight,
     BoxWidthStyle selectionWidthStyle = ui.BoxWidthStyle.tight,
-    EdgeInsets scrollPadding = const EdgeInsets.all(20.0),
+    EdgeInsets scrollPadding = const EdgeInsets.all(20),
     Brightness keyboardAppearance = Brightness.light,
     DragStartBehavior dragStartBehavior = DragStartBehavior.start,
     bool enableInteractiveSelection = true,
@@ -120,7 +120,7 @@ class RichEditableText extends EditableText {
         );
 
   @override
-  createState() => _RichEditableTextState();
+  _RichEditableTextState createState() => _RichEditableTextState();
 }
 
 class _RichEditableTextState extends EditableTextState {

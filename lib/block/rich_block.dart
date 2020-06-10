@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rich_input/block/block_base.dart';
+import 'block_base.dart';
 
 /// Processing rich block
 class RickBlock extends BlockBase {
@@ -12,7 +12,7 @@ class RickBlock extends BlockBase {
   RickBlock({@required this.text, this.value, this.style});
 
   @override
-  void add(String chat) {
+  void add(String char) {
     throw 'error';
   }
 
