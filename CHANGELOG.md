@@ -1,3 +1,7 @@
+## [1.1.3] - 2020-6-12
+
+-   Fix addBlock position error when not getting focus
+
 ## [1.1.2] - 2020-5-20
 
 -   Fix a display error caused by deleting text during composing

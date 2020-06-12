@@ -155,7 +155,9 @@ class RichInput {
       }
       final int oldCount = _old.text.length;
       final int nowCount = now.text.length;
-      _cursorOffset = now.selection.baseOffset;
+      if (now.selection.baseOffset != -1) {
+        _cursorOffset = now.selection.baseOffset;
+      }
 
       if (oldCount < nowCount) {
         // add value

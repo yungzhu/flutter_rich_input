@@ -23,9 +23,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   RichInput _richInput;
+  FocusNode _focusNode;
 
   @override
   void initState() {
+    _focusNode = FocusNode();
     _richInput = RichInput();
     // refresh text and value
     _richInput.controller.addListener(() {
@@ -44,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              _richInput.textField(),
+              _richInput.textField(focusNode: _focusNode),
               Wrap(
                 spacing: 10,
                 children: [
@@ -92,6 +94,12 @@ class _MyHomePageState extends State<MyHomePage> {
                       _richInput.clear();
                     },
                     child: const Text("Clear"),
+                  ),
+                  RaisedButton(
+                    onPressed: () {
+                      _focusNode.unfocus();
+                    },
+                    child: const Text("unfocus"),
                   )
                 ],
               ),
