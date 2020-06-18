@@ -15,7 +15,7 @@ Language: [English](README.md) | [中文简体](README-ZH.md)
 
 ## Getting Started
 
-```
+```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_rich_input/block/rich_block.dart';
 import 'package:flutter_rich_input/flutter_rich_input.dart';
