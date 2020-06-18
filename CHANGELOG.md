@@ -1,3 +1,7 @@
+## [1.1.4] - 2020-6-18
+
+-   Fix some warnings
+
 ## [1.1.3] - 2020-6-12
 
 -   Fix addBlock position error when not getting focus
