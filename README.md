@@ -2,6 +2,8 @@
 
 # flutter_rich_input is no longer used and uses a better way to enable a rich_input plugin, [click here to see it!](https://pub.dev/packages/rich_input)
 
+# flutter_rich_input 不再维护，使用了更好的方式，新启动了一个 rich_input 插件，[点击这里查看](https://pub.dev/packages/rich_input)
+
 This is a high performance rich media input box, implemented through the native textfield extension, with less disruptive, but at the same time has a strong extensibility, implements the @ someone, # topics, expressions and other functions, support custom color highlighting
 
 Language: [English](README.md) | [中文简体](README-ZH.md)
