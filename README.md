@@ -1,5 +1,3 @@
-# flutter_rich_input
-
 # flutter_rich_input is no longer used and uses a better way to enable a rich_input plugin, [click here to see it!](https://pub.dev/packages/rich_input)
 
 # flutter_rich_input 不再维护，使用了更好的方式，新启动了一个 rich_input 插件，[点击这里查看](https://pub.dev/packages/rich_input)

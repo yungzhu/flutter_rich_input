@@ -1,5 +1,3 @@
-# flutter_rich_input
-
 # flutter_rich_input 不再维护，使用了更好的方式，新启动了一个 rich_input 插件，[点击这里查看](https://pub.dev/packages/rich_input)
 
 这是一个高性能的富媒体输入框，通过原生的 textfield 扩展实现，具有较小的破坏性，同时具有较强的扩展性，实现了@某人，#话题，表情等功能，支持自定义高亮
