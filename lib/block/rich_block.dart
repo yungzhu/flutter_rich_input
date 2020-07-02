@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'block_base.dart';
 
 /// Processing rich block
-class RickBlock extends BlockBase {
+class RichBlock extends BlockBase {
   @protected
   String text;
   @protected
   String value;
 
   final TextStyle style;
-  RickBlock({@required this.text, this.value, this.style});
+  RichBlock({@required this.text, this.value, this.style});
 
   @override
   void add(String char) {

@@ -70,14 +70,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   RaisedButton(
                     onPressed: () {
-                      final at = RickBlock(text: " @abc ", value: " @123456 ");
+                      final at = RichBlock(text: " @abc ", value: " @123456 ");
                       _richInput.addBlock(at);
                     },
                     child: const Text("Add @    "),
                   ),
                   RaisedButton(
                     onPressed: () {
-                      final at = RickBlock(
+                      final at = RichBlock(
                         text: " #subject ",
                         value: " #888999 ",
                         style: const TextStyle(

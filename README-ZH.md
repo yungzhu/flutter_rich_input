@@ -1,5 +1,7 @@
 # flutter_rich_input
 
+# flutter_rich_input 不再维护，使用了更好的方式，新启动了一个 rich_input 插件，[点击这里查看](https://pub.dev/packages/rich_input)
+
 这是一个高性能的富媒体输入框，通过原生的 textfield 扩展实现，具有较小的破坏性，同时具有较强的扩展性，实现了@某人，#话题，表情等功能，支持自定义高亮
 
 文档语言: [English](README.md) | [中文简体](README-ZH.md)
@@ -41,10 +43,13 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   RichInput _richInput;
+  FocusNode _focusNode;
 
   @override
   void initState() {
+    _focusNode = FocusNode();
     _richInput = RichInput();
+    // refresh text and value
     _richInput.controller.addListener(() {
       setState(() {});
     });
@@ -61,54 +66,60 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              _richInput.textField(),
+              _richInput.textField(focusNode: _focusNode),
               Wrap(
                 spacing: 10,
                 children: [
                   RaisedButton(
-                    child: const Text("Add Text"),
                     onPressed: () {
                       _richInput.addText("text");
                     },
+                    child: const Text("Add Text"),
                   ),
                   RaisedButton(
-                    child: const Text("Add ☺"),
                     onPressed: () {
-                      _richInput.addText("☺");
+                      _richInput.addText("😁");
                     },
+                    child: const Text("Add 😁"),
                   ),
                   RaisedButton(
-                    child: const Text("Add 👍"),
                     onPressed: () {
                       _richInput.addText("👍");
                     },
+                    child: const Text("Add 👍"),
                   ),
                   RaisedButton(
-                    child: const Text("Add @    "),
                     onPressed: () {
-                      var at = RickBlock(text: " @abc ", value: " @123456 ");
+                      final at = RichBlock(text: " @abc ", value: " @123456 ");
                       _richInput.addBlock(at);
                     },
+                    child: const Text("Add @    "),
                   ),
                   RaisedButton(
-                    child: const Text("Add #"),
                     onPressed: () {
-                      var at = RickBlock(
+                      final at = RichBlock(
                         text: " #subject ",
-                        value: "#888999 ",
-                        style: TextStyle(
+                        value: " #888999 ",
+                        style: const TextStyle(
                           color: Colors.red,
                           fontWeight: FontWeight.bold,
                         ),
                       );
                       _richInput.addBlock(at);
                     },
+                    child: const Text("Add #"),
                   ),
                   RaisedButton(
-                    child: const Text("Clear"),
                     onPressed: () {
                       _richInput.clear();
                     },
+                    child: const Text("Clear"),
+                  ),
+                  RaisedButton(
+                    onPressed: () {
+                      _focusNode.unfocus();
+                    },
+                    child: const Text("unfocus"),
                   )
                 ],
               ),

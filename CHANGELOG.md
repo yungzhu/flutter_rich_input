@@ -1,3 +1,7 @@
+## [1.2.0] - 2020-7-2
+
+-   flutter_rich_input is no longer maintained and uses a better way to enable a rich_input plugin, [click here to see it!](https://pub.dev/packages/rich_input)
+
 ## [1.1.4] - 2020-6-18
 
 -   Fix some warnings
